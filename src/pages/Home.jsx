@@ -1,7 +1,19 @@
+import HeroSlider from '../components/home/HeroSlider';
+import FeaturedProperties from '../components/home/FeaturedProperties';
+import WhyChooseUs from '../components/home/WhyChooseUs';
+import HowItWorks from '../components/home/HowItWorks';
+import OurTeam from '../components/home/OurTeam';
+import Testimonials from '../components/home/Testimonials';
+
 const Home = () => {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold">Home Page - Coming Soon</h1>
+    <div className="min-h-screen">
+      <HeroSlider />
+      <FeaturedProperties />
+      <WhyChooseUs />
+      <HowItWorks />
+      <OurTeam />
+      <Testimonials />
     </div>
   );
 };

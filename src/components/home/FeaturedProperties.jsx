@@ -1,0 +1,138 @@
+import { useFeaturedProperties } from '../../hooks/useProperties';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router';
+import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt } from 'react-icons/fa';
+import { format } from 'date-fns';
+
+const FeaturedProperties = () => {
+  const { data: properties, isLoading, error } = useFeaturedProperties();
+
+  if (isLoading) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Properties</h2>
+            <p className="text-gray-600">Discover our most recent property listings</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <Card key={i} className="animate-pulse">
+                <div className="h-48 bg-gray-300 rounded-t-lg"></div>
+                <CardHeader>
+                  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
+                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-red-500">Failed to load featured properties</p>
+        </div>
+      </section>
+    );
+  }
+
+  if (!properties || properties.length === 0) {
+    return (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Properties</h2>
+          <p className="text-gray-600 mb-8">No properties available yet. Be the first to list!</p>
+          <Button asChild className="bg-green-500 hover:bg-green-600">
+            <Link to="/add-property">Add Your First Property</Link>
+          </Button>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section className="py-16 bg-gray-50">
+      <div className="container mx-auto px-4">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Properties</h2>
+          <p className="text-gray-600 text-lg">
+            Discover our most recent property listings across Bangladesh
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {properties.map((property) => (
+            <Card key={property._id} className="overflow-hidden hover:shadow-xl transition-shadow">
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={property.imageUrl || '/staticassets/swiper1.jpg'}
+                  alt={property.propertyName}
+                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    {property.category}
+                  </span>
+                </div>
+                <div className="absolute top-4 right-4">
+                  <span className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    Featured
+                  </span>
+                </div>
+              </div>
+              
+              <CardHeader>
+                <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">
+                  {property.propertyName}
+                </h3>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <FaMapMarkerAlt className="text-green-500" />
+                  <span className="text-sm">{property.location}</span>
+                </div>
+              </CardHeader>
+              
+              <CardContent>
+                <p className="text-gray-600 mb-4 line-clamp-2">
+                  {property.description || 'Premium property in a prime location'}
+                </p>
+                <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
+                  <div className="flex items-center gap-1">
+                    <FaRulerCombined />
+                    <span>{property.propertySize || 'N/A'}</span>
+                  </div>
+                  {property.createdAt && (
+                    <span>{format(new Date(property.createdAt), 'MMM dd, yyyy')}</span>
+                  )}
+                </div>
+                <div className="text-2xl font-bold text-green-600">
+                  {property.price ? `৳${property.price.toLocaleString()}` : 'Price on Request'}
+                </div>
+              </CardContent>
+              
+              <CardFooter>
+                <Button asChild className="w-full bg-green-500 hover:bg-green-600">
+                  <Link to={`/property/${property._id}`}>View Details</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+        
+        <div className="text-center mt-12">
+          <Button asChild variant="outline" size="lg" className="border-green-500 text-green-500 hover:bg-green-50">
+            <Link to="/all-properties">View All Properties</Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FeaturedProperties;
+
