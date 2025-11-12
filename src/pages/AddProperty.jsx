@@ -17,6 +17,24 @@ import {
 import { Separator } from '@/components/ui/separator';
 import Swal from 'sweetalert2';
 
+const propertyTypeOptions = {
+  'Land/Plot': [
+    { value: 'Residential Plot', label: 'Residential Plot' },
+    { value: 'Commercial Plot', label: 'Commercial Plot' },
+    { value: 'Land', label: 'Open Land' },
+  ],
+  Commercial: [
+    { value: 'Commercial Plot', label: 'Commercial Plot' },
+    { value: 'Office Space', label: 'Office Space' },
+    { value: 'Warehouse', label: 'Warehouse' },
+    { value: 'Retail Space', label: 'Retail Space' },
+  ],
+  Apartment: [
+    { value: 'Apartment/Flats', label: 'Apartment / Flats' },
+    { value: 'Serviced Apartment', label: 'Serviced Apartment' },
+  ],
+};
+
 const categoryOptions = [
   { value: 'Land/Plot', label: 'Land / Plot' },
   { value: 'Commercial', label: 'Commercial' },
@@ -28,21 +46,101 @@ const propertyForOptions = [
   { value: 'Rent', label: 'For Rent' },
 ];
 
-const propertyTypeOptions = {
-  'Land/Plot': [
-    { value: 'Residential Plot', label: 'Residential Plot' },
-    { value: 'Commercial Plot', label: 'Commercial Plot' },
-    { value: 'Land', label: 'Land' },
-  ],
-  Commercial: [
-    { value: 'Office Space', label: 'Office Space' },
-    { value: 'Warehouse', label: 'Warehouse' },
-    { value: 'Retail Space', label: 'Retail Space' },
-  ],
-  Apartment: [
-    { value: 'Apartment/Flats', label: 'Apartment / Flats' },
-    { value: 'Serviced Apartment', label: 'Serviced Apartment' },
-  ],
+const RENT_FIELDS = ['priceUnit', 'depositAmount', 'availableFrom'];
+
+const FIELD_METADATA = {
+  propertySize: {
+    label: 'Property Size',
+    placeholder: 'e.g. 6 Katha / 2400 sqft',
+    required: true,
+  },
+  constructionStatus: {
+    label: 'Construction Status',
+    type: 'select',
+    options: ['Ready', 'Under Construction', 'Under Development', 'Almost Ready'],
+    required: true,
+  },
+  transactionType: {
+    label: 'Transaction Type',
+    type: 'select',
+    options: ['New', 'Resale'],
+    required: true,
+  },
+  floorAvailableOn: {
+    label: 'Floor Available On',
+    placeholder: 'e.g. 5th Floor',
+  },
+  totalFloor: {
+    label: 'Total Floors',
+    type: 'number',
+  },
+  garages: {
+    label: 'Parking / Garages',
+    placeholder: 'e.g. 2 Car Parking',
+  },
+  bedrooms: {
+    label: 'Bedrooms',
+    type: 'number',
+    required: true,
+  },
+  bathrooms: {
+    label: 'Bathrooms',
+    type: 'number',
+    required: true,
+  },
+  balconies: {
+    label: 'Balconies',
+    type: 'number',
+  },
+  facing: {
+    label: 'Facing',
+    type: 'select',
+    options: ['North', 'South', 'East', 'West', 'North-East', 'South-East'],
+  },
+  priceUnit: {
+    label: 'Price Unit',
+    placeholder: 'e.g. monthly',
+    requiredWhen: (data) => data.propertyFor === 'Rent',
+  },
+  depositAmount: {
+    label: 'Security Deposit',
+    type: 'number',
+  },
+  availableFrom: {
+    label: 'Available From',
+    type: 'date',
+    requiredWhen: (data) => data.propertyFor === 'Rent',
+  },
+};
+
+const FIELD_CONFIG = {
+  'Land/Plot': {
+    base: ['propertySize', 'constructionStatus', 'transactionType'],
+    typeSpecific: {},
+  },
+  Commercial: {
+    base: ['propertySize', 'constructionStatus', 'transactionType'],
+    typeSpecific: {
+      'Office Space': ['floorAvailableOn', 'totalFloor', 'garages'],
+      Warehouse: ['floorAvailableOn', 'garages'],
+      'Retail Space': ['floorAvailableOn'],
+      'Commercial Plot': [],
+    },
+  },
+  Apartment: {
+    base: [
+      'propertySize',
+      'constructionStatus',
+      'transactionType',
+      'bedrooms',
+      'bathrooms',
+      'balconies',
+      'totalFloor',
+      'facing',
+      'garages',
+    ],
+    typeSpecific: {},
+  },
 };
 
 const initialFormState = {
@@ -51,12 +149,21 @@ const initialFormState = {
   category: '',
   propertyType: '',
   propertyFor: '',
-  propertySize: '',
+  location: '',
   price: '',
+  propertySize: '',
+  constructionStatus: '',
+  transactionType: '',
+  floorAvailableOn: '',
+  totalFloor: '',
+  garages: '',
+  bedrooms: '',
+  bathrooms: '',
+  balconies: '',
+  facing: '',
   priceUnit: '',
   depositAmount: '',
   availableFrom: '',
-  location: '',
   imageUrl: '',
   features: '',
 };
@@ -74,64 +181,92 @@ const AddProperty = () => {
   }, [formData.features]);
 
   useEffect(() => {
-    if (formData.propertyFor === 'Rent') {
-      setFormData((prev) => ({
-        ...prev,
-        priceUnit: prev.priceUnit || 'monthly',
-      }));
-    } else if (formData.propertyFor === 'Sale') {
+    if (formData.propertyFor !== 'Rent') {
       setFormData((prev) => ({
         ...prev,
         priceUnit: '',
         depositAmount: '',
+        availableFrom: '',
       }));
+    } else if (!formData.priceUnit) {
+      setFormData((prev) => ({ ...prev, priceUnit: 'monthly' }));
     }
   }, [formData.propertyFor]);
 
   useEffect(() => {
-    if (formData.category) {
-      const types = propertyTypeOptions[formData.category] || [];
-      if (!types.find((type) => type.value === formData.propertyType)) {
-        setFormData((prev) => ({
-          ...prev,
-          propertyType: types[0]?.value || '',
-        }));
-      }
-    } else {
+    if (!formData.category) {
+      setFormData((prev) => ({ ...prev, propertyType: '' }));
+      return;
+    }
+
+    const options = propertyTypeOptions[formData.category] || [];
+    if (!options.find((option) => option.value === formData.propertyType)) {
       setFormData((prev) => ({
         ...prev,
-        propertyType: '',
+        propertyType: options[0]?.value || '',
       }));
     }
-  }, [formData.category]);
+  }, [formData.category, formData.propertyType]);
+
+  const activeFieldKeys = useMemo(() => {
+    const keys = new Set();
+    const config = FIELD_CONFIG[formData.category];
+
+    if (config?.base) {
+      config.base.forEach((field) => keys.add(field));
+    }
+
+    if (config?.typeSpecific && formData.propertyType) {
+      const specific = config.typeSpecific[formData.propertyType] || [];
+      specific.forEach((field) => keys.add(field));
+    }
+
+    if (formData.propertyFor === 'Rent') {
+      RENT_FIELDS.forEach((field) => keys.add(field));
+    }
+
+    return Array.from(keys);
+  }, [formData.category, formData.propertyType, formData.propertyFor]);
 
   const handleChange = (field) => (event) => {
-    const value =
-      event && event.target ? event.target.value : event; // handles select values
+    const value = event?.target ? event.target.value : event;
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
   };
 
-  const validateForm = () => {
-    const requiredFields = [
-      'propertyName',
-      'description',
-      'category',
-      'propertyType',
-      'propertyFor',
-      'price',
-      'location',
-      'imageUrl',
-    ];
+  const baseRequiredFields = [
+    'propertyName',
+    'description',
+    'category',
+    'propertyType',
+    'propertyFor',
+    'price',
+    'location',
+    'imageUrl',
+  ];
 
-    const missingField = requiredFields.find((field) => !formData[field]?.toString().trim());
-    if (missingField) {
+  const dynamicRequiredFields = activeFieldKeys.filter((field) => {
+    const metadata = FIELD_METADATA[field];
+    if (!metadata) return false;
+    if (metadata.requiredWhen) {
+      return metadata.requiredWhen(formData);
+    }
+    return Boolean(metadata.required);
+  });
+
+  const validateForm = () => {
+    const missing = [...baseRequiredFields, ...dynamicRequiredFields].find((field) => {
+      const value = formData[field];
+      return value === undefined || value === null || value.toString().trim() === '';
+    });
+
+    if (missing) {
       Swal.fire({
         icon: 'warning',
         title: 'Missing Information',
-        text: 'Please fill in all required fields before submitting the property.',
+        text: 'Please complete all required fields before submitting the property.',
       });
       return false;
     }
@@ -150,16 +285,10 @@ const AddProperty = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
+    if (!validateForm()) return;
 
     const payload = {
       ...formData,
-      price: Number(formData.price),
-      depositAmount: formData.depositAmount
-        ? Number(formData.depositAmount)
-        : undefined,
       features: parsedFeatures,
       userEmail: user.email,
       userName: user.displayName || 'HomeNest User',
@@ -168,6 +297,32 @@ const AddProperty = () => {
         email: user.email,
       },
     };
+
+    const numericFields = [
+      'price',
+      'depositAmount',
+      'bedrooms',
+      'bathrooms',
+      'balconies',
+      'totalFloor',
+    ];
+
+    numericFields.forEach((field) => {
+      if (payload[field] !== undefined && payload[field] !== '') {
+        const num = Number(payload[field]);
+        if (!Number.isNaN(num)) {
+          payload[field] = num;
+        } else {
+          delete payload[field];
+        }
+      }
+    });
+
+    Object.keys(payload).forEach((key) => {
+      if (payload[key] === '' || payload[key] === undefined || payload[key] === null) {
+        delete payload[key];
+      }
+    });
 
     try {
       await addPropertyMutation.mutateAsync(payload);
@@ -192,6 +347,63 @@ const AddProperty = () => {
     }
   };
 
+  const renderField = (fieldKey) => {
+    const metadata = FIELD_METADATA[fieldKey];
+    if (!metadata) return null;
+
+    const value = formData[fieldKey];
+    const commonProps = {
+      id: fieldKey,
+      value: value ?? '',
+      onChange: (event) => handleChange(fieldKey)(event),
+      required: dynamicRequiredFields.includes(fieldKey),
+    };
+
+    if (metadata.type === 'select') {
+      return (
+        <div key={fieldKey} className="space-y-2">
+          <Label htmlFor={fieldKey}>
+            {metadata.label}
+            {dynamicRequiredFields.includes(fieldKey) && (
+              <span className="text-red-500"> *</span>
+            )}
+          </Label>
+          <Select value={value ?? ''} onValueChange={(val) => handleChange(fieldKey)(val)}>
+            <SelectTrigger className="h-12 rounded-xl">
+              <SelectValue placeholder={`Select ${metadata.label.toLowerCase()}`} />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              {metadata.options.map((option) => (
+                <SelectItem key={option} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      );
+    }
+
+    const inputType = metadata.type === 'number' ? 'number' : metadata.type === 'date' ? 'date' : 'text';
+
+    return (
+      <div key={fieldKey} className="space-y-2">
+        <Label htmlFor={fieldKey}>
+          {metadata.label}
+          {dynamicRequiredFields.includes(fieldKey) && (
+            <span className="text-red-500"> *</span>
+          )}
+        </Label>
+        <Input
+          {...commonProps}
+          type={inputType}
+          placeholder={metadata.placeholder}
+          min={metadata.type === 'number' ? '0' : undefined}
+        />
+      </div>
+    );
+  };
+
   return (
     <section className="py-16 bg-gray-50">
       <div className="container mx-auto px-4">
@@ -201,8 +413,7 @@ const AddProperty = () => {
               Add a New Property
             </h1>
             <p className="text-gray-600">
-              Provide accurate details so tenants and buyers can discover the right property
-              quickly.
+              Provide accurate details so tenants and buyers can discover the right property quickly.
             </p>
           </CardHeader>
           <Separator />
@@ -295,15 +506,6 @@ const AddProperty = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="propertySize">Property Size</Label>
-                  <Input
-                    id="propertySize"
-                    value={formData.propertySize}
-                    onChange={handleChange('propertySize')}
-                    placeholder="e.g. 6 Katha / 2400 sqft"
-                  />
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="price">
                     Price <span className="text-red-500">*</span>
                   </Label>
@@ -315,38 +517,6 @@ const AddProperty = () => {
                     onChange={handleChange('price')}
                     placeholder="e.g. 14500000"
                     required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="priceUnit">Price Unit {formData.propertyFor === 'Rent' && <span className="text-red-500">*</span>}</Label>
-                  <Input
-                    id="priceUnit"
-                    value={formData.priceUnit}
-                    onChange={handleChange('priceUnit')}
-                    placeholder={formData.propertyFor === 'Rent' ? 'e.g. monthly' : 'Optional'}
-                    disabled={formData.propertyFor !== 'Rent'}
-                  />
-                </div>
-                {formData.propertyFor === 'Rent' && (
-                  <div className="space-y-2">
-                    <Label htmlFor="depositAmount">Security Deposit</Label>
-                    <Input
-                      id="depositAmount"
-                      type="number"
-                      min="0"
-                      value={formData.depositAmount}
-                      onChange={handleChange('depositAmount')}
-                      placeholder="e.g. 1200000"
-                    />
-                  </div>
-                )}
-                <div className="space-y-2">
-                  <Label htmlFor="availableFrom">Available From</Label>
-                  <Input
-                    id="availableFrom"
-                    type="date"
-                    value={formData.availableFrom}
-                    onChange={handleChange('availableFrom')}
                   />
                 </div>
                 <div className="space-y-2">
@@ -374,6 +544,18 @@ const AddProperty = () => {
                   />
                 </div>
               </div>
+
+              {activeFieldKeys.length > 0 && (
+                <div>
+                  <Separator className="my-6" />
+                  <h2 className="text-xl font-semibold text-gray-800 mb-4">
+                    Additional Details
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {activeFieldKeys.map((fieldKey) => renderField(fieldKey))}
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="description">

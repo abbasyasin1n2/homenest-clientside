@@ -60,3 +60,55 @@ export const useAddProperty = () => {
   });
 };
 
+export const useMyProperties = (email) => {
+  return useQuery({
+    queryKey: ['my-properties', email],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(`/properties/user/${email}`);
+      return data;
+    },
+    enabled: !!email,
+  });
+};
+
+export const useUpdateProperty = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, payload }) => {
+      const { data } = await axiosInstance.put(`/properties/${id}`, payload);
+      return data;
+    },
+    onSuccess: (_data, variables) => {
+      if (variables?.payload?.userEmail) {
+        queryClient.invalidateQueries({
+          queryKey: ['my-properties', variables.payload.userEmail],
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ['featured-properties'] });
+      queryClient.invalidateQueries({ queryKey: ['all-properties'] });
+      queryClient.invalidateQueries({ queryKey: ['property', variables.id] });
+    },
+  });
+};
+
+export const useDeleteProperty = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id }) => {
+      const { data } = await axiosInstance.delete(`/properties/${id}`);
+      return data;
+    },
+    onSuccess: (_data, variables) => {
+      if (variables?.userEmail) {
+        queryClient.invalidateQueries({
+          queryKey: ['my-properties', variables.userEmail],
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ['featured-properties'] });
+      queryClient.invalidateQueries({ queryKey: ['all-properties'] });
+    },
+  });
+};
+
