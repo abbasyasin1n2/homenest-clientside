@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../api/axios';
 
-// Fetch featured properties (6 most recent)
+// Fetch featured properties
 export const useFeaturedProperties = () => {
   return useQuery({
     queryKey: ['featured-properties'],

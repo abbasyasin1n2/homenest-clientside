@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { FaHome, FaFacebook, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { FaHome, FaFacebook, FaInstagram, FaLinkedin, FaHeart } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
 import { Button } from '@/components/ui/button';
 
@@ -167,7 +167,7 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 mt-10 pt-8 text-center">
           <p className="text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} <span className="font-semibold text-white">HomeNest</span>. All rights reserved. Made with <span className="text-red-500">❤️</span> in Bangladesh
+            &copy; {new Date().getFullYear()} <span className="font-semibold text-white">HomeNest</span>. All rights reserved. Made with <FaHeart className="inline text-red-500" /> by Abbas
           </p>
         </div>
       </div>

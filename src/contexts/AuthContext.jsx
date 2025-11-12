@@ -104,19 +104,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Monitor auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       
-      // Debug: Log user photo URL
       if (currentUser) {
-        console.log('User logged in:', {
-          displayName: currentUser.displayName,
-          email: currentUser.email,
-          photoURL: currentUser.photoURL
-        });
-        
         const token = await currentUser.getIdToken();
         localStorage.setItem('firebaseToken', token);
       }

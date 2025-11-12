@@ -1,13 +1,12 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3000/api',
+  baseURL: 'https://homenestserver.vercel.app/api',
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptor to add auth token
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('firebaseToken');
@@ -21,12 +20,10 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-// Response interceptor for error handling
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
       localStorage.removeItem('firebaseToken');
       window.location.href = '/login';
     }

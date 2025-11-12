@@ -147,8 +147,7 @@ const Navbar = () => {
                       referrerPolicy="no-referrer"
                       crossOrigin="anonymous"
                       onError={(e) => {
-                        console.log('Image failed to load, falling back to avatar');
-                        e.target.onerror = null; // Prevent infinite loop
+                        e.target.onerror = null;
                         e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=10b981&color=fff&size=200&bold=true`;
                       }}
                     />
