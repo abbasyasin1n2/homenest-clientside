@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import axiosInstance from '../api/axios';
 
 // Fetch featured properties (6 most recent)
@@ -37,6 +37,26 @@ export const useProperty = (id) => {
       return data;
     },
     enabled: !!id,
+  });
+};
+
+export const useAddProperty = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (payload) => {
+      const { data } = await axiosInstance.post('/properties', payload);
+      return data;
+    },
+    onSuccess: (_data, variables) => {
+      if (variables?.userEmail) {
+        queryClient.invalidateQueries({
+          queryKey: ['my-properties', variables.userEmail],
+        });
+      }
+      queryClient.invalidateQueries({ queryKey: ['featured-properties'] });
+      queryClient.invalidateQueries({ queryKey: ['all-properties'] });
+    },
   });
 };
 
