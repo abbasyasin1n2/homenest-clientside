@@ -3,23 +3,27 @@ import { Card, CardContent } from '@/components/ui/card';
 const OurTeam = () => {
   const teamMembers = [
     {
-      name: 'Mark Taylor',
-      role: 'Co-ordinator',
+      name: 'Farhana Rahman',
+      role: 'Community Relations Lead',
+      tagline: 'Connecting families with trusted neighbourhoods across Dhaka',
       image: '/staticassets/ourteam-member1.jpg',
     },
     {
-      name: 'Melugin Roy',
-      role: 'Construction',
+      name: 'Tariq Hasan',
+      role: 'Lead Structural Planner',
+      tagline: 'Designing sustainable projects tailored for Bangladeshi cities',
       image: '/staticassets/ourteam-member2.jpg',
     },
     {
-      name: 'David Hardson',
-      role: 'CEO, Central Radio',
+      name: 'Nusrat Jahan',
+      role: 'Senior Legal Advisor',
+      tagline: 'Ensuring every property deal follows local regulations with care',
       image: '/staticassets/ourteam-member3.jpg',
     },
     {
-      name: 'Sinthiya Doe',
-      role: 'SR',
+      name: 'Arefin Khan',
+      role: 'Investment Strategist',
+      tagline: 'Crafting smart financing plans for homebuyers and investors',
       image: '/staticassets/ourteam-member4.png',
     },
   ];
@@ -59,7 +63,7 @@ const OurTeam = () => {
                     </div>
                     <h3 className="text-xl font-bold text-gray-800 mb-1">{member.name}</h3>
                     <p className="text-sm text-gray-500">
-                      Delivering trusted real estate services across Bangladesh
+                      {member.tagline}
                     </p>
                   </div>
                 </div>
