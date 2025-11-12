@@ -5,13 +5,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { FaGoogle, FaHome } from 'react-icons/fa';
+import { FaGoogle, FaHome, FaEye, FaEyeSlash } from 'react-icons/fa';
 import Swal from 'sweetalert2';
 
 const Register = () => {
   const { registerUser, googleLogin } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -167,7 +168,7 @@ const Register = () => {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="photoURL">Photo URL</Label>
+              <Label htmlFor="photoURL">Photo URL (Optional)</Label>
               <Input
                 id="photoURL"
                 name="photoURL"
@@ -175,22 +176,34 @@ const Register = () => {
                 placeholder="https://example.com/your-photo.jpg"
                 value={formData.photoURL}
                 onChange={handleChange}
-                required
                 disabled={loading}
               />
+              <p className="text-xs text-muted-foreground">
+                Leave empty to use default avatar
+              </p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Create a strong password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-                disabled={loading}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Create a strong password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                  disabled={loading}
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </button>
+              </div>
               <p className="text-xs text-muted-foreground">
                 Must contain uppercase, lowercase, and at least 6 characters
               </p>

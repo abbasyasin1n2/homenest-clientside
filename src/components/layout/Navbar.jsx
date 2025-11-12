@@ -125,11 +125,18 @@ const Navbar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                  <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
                     <img
-                      src={user.photoURL || 'https://via.placeholder.com/40'}
-                      alt={user.displayName}
+                      src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=10b981&color=fff&size=200&bold=true`}
+                      alt={user.displayName || 'User'}
                       className="h-10 w-10 rounded-full border-2 border-green-500 object-cover"
+                      referrerPolicy="no-referrer"
+                      crossOrigin="anonymous"
+                      onError={(e) => {
+                        console.log('Image failed to load, falling back to avatar');
+                        e.target.onerror = null; // Prevent infinite loop
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=10b981&color=fff&size=200&bold=true`;
+                      }}
                     />
                   </Button>
                 </DropdownMenuTrigger>
@@ -186,9 +193,15 @@ const Navbar = () => {
                 <div>
                   <div className="flex items-center gap-3 mb-3 p-2 rounded-lg bg-gray-50">
                     <img
-                      src={user.photoURL || 'https://via.placeholder.com/40'}
-                      alt={user.displayName}
-                      className="w-10 h-10 rounded-full border-2 border-green-500"
+                      src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=10b981&color=fff&size=200&bold=true`}
+                      alt={user.displayName || 'User'}
+                      className="w-10 h-10 rounded-full border-2 border-green-500 object-cover"
+                      referrerPolicy="no-referrer"
+                      crossOrigin="anonymous"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=10b981&color=fff&size=200&bold=true`;
+                      }}
                     />
                     <div>
                       <p className="text-sm font-semibold">{user.displayName}</p>

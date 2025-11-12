@@ -32,10 +32,21 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
+      
+      // Generate a default avatar using UI Avatars if no photo provided
+      const defaultAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=10b981&color=fff&size=200&bold=true`;
+      
+      // Update profile with name and photo
       await updateProfile(result.user, {
         displayName: name,
-        photoURL: photoURL
+        photoURL: photoURL || defaultAvatar
       });
+      
+      // Reload user to get updated profile
+      await result.user.reload();
+      
+      // Update local user state immediately
+      setUser(auth.currentUser);
       
       // Get and store Firebase token
       const token = await result.user.getIdToken();
@@ -69,6 +80,9 @@ export const AuthProvider = ({ children }) => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
       
+      // Update local user state immediately
+      setUser(result.user);
+      
       // Get and store Firebase token
       const token = await result.user.getIdToken();
       localStorage.setItem('firebaseToken', token);
@@ -95,8 +109,14 @@ export const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       
-      // Refresh token periodically
+      // Debug: Log user photo URL
       if (currentUser) {
+        console.log('User logged in:', {
+          displayName: currentUser.displayName,
+          email: currentUser.email,
+          photoURL: currentUser.photoURL
+        });
+        
         const token = await currentUser.getIdToken();
         localStorage.setItem('firebaseToken', token);
       }
