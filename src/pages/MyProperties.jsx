@@ -99,6 +99,8 @@ const MyProperties = () => {
       });
       setSelectedProperty(null);
       setEditForm(null);
+      // Navigate to property details page
+      navigate(`/property/${selectedProperty._id}`);
     } catch (err) {
       Swal.fire({
         icon: 'error',

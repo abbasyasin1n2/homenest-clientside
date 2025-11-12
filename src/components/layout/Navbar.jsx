@@ -1,6 +1,7 @@
 import { Link, NavLink } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
-import { FaHome, FaBuilding, FaPlusCircle, FaListAlt, FaStar, FaBars } from 'react-icons/fa';
+import { useTheme } from '../../contexts/ThemeContext';
+import { FaHome, FaBuilding, FaPlusCircle, FaListAlt, FaStar, FaBars, FaMoon, FaSun } from 'react-icons/fa';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -14,6 +15,7 @@ import {
 
 const Navbar = () => {
   const { user, logoutUser } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleLogout = async () => {
@@ -33,7 +35,7 @@ const Navbar = () => {
             `flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium ${
               isActive
                 ? 'bg-green-500 text-white'
-                : 'hover:bg-green-50 text-gray-700'
+                : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
             }`
           }
         >
@@ -47,7 +49,7 @@ const Navbar = () => {
             `flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium ${
               isActive
                 ? 'bg-green-500 text-white'
-                : 'hover:bg-green-50 text-gray-700'
+                : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
             }`
           }
         >
@@ -104,7 +106,7 @@ const Navbar = () => {
   );
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50 border-b">
+    <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 border-b dark:border-gray-800 transition-colors">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
@@ -112,7 +114,7 @@ const Navbar = () => {
             <div className="bg-green-500 p-2 rounded-lg shadow-md">
               <FaHome className="text-white text-2xl" />
             </div>
-            <span className="text-2xl font-bold text-gray-800">
+            <span className="text-2xl font-bold text-gray-800 dark:text-white">
               Home<span className="text-green-500">Nest</span>
             </span>
           </Link>
@@ -122,6 +124,18 @@ const Navbar = () => {
 
           {/* Auth Section - Desktop */}
           <div className="hidden lg:flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="rounded-full hover:bg-green-50 dark:hover:bg-gray-800"
+            >
+              {theme === 'dark' ? (
+                <FaSun className="h-5 w-5 text-yellow-500" />
+              ) : (
+                <FaMoon className="h-5 w-5 text-gray-600" />
+              )}
+            </Button>
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -186,12 +200,29 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {showMobileMenu && (
-          <div className="lg:hidden pb-4 border-t">
+          <div className="lg:hidden pb-4 border-t dark:border-gray-800">
             <ul className="flex flex-col gap-2 mt-4">{navLinks}</ul>
-            <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+              <Button
+                variant="outline"
+                onClick={toggleTheme}
+                className="w-full mb-3 border-gray-300 dark:border-gray-700"
+              >
+                {theme === 'dark' ? (
+                  <>
+                    <FaSun className="mr-2 h-4 w-4 text-yellow-500" />
+                    Light Mode
+                  </>
+                ) : (
+                  <>
+                    <FaMoon className="mr-2 h-4 w-4" />
+                    Dark Mode
+                  </>
+                )}
+              </Button>
               {user ? (
                 <div>
-                  <div className="flex items-center gap-3 mb-3 p-2 rounded-lg bg-gray-50">
+                  <div className="flex items-center gap-3 mb-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-800">
                     <img
                       src={user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || 'User')}&background=10b981&color=fff&size=200&bold=true`}
                       alt={user.displayName || 'User'}
@@ -204,8 +235,8 @@ const Navbar = () => {
                       }}
                     />
                     <div>
-                      <p className="text-sm font-semibold">{user.displayName}</p>
-                      <p className="text-xs text-gray-500">{user.email}</p>
+                      <p className="text-sm font-semibold dark:text-white">{user.displayName}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                     </div>
                   </div>
                   <Button
