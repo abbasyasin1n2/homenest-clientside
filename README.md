@@ -1,6 +1,6 @@
 # HomeNest - Real Estate Listing Portal
 
-**Live Site:** [Add your deployed URL here]
+**Live Site:** https://homenest-clientside.web.app/
 
 HomeNest is a real estate platform built for the Bangladesh market where property owners can list their properties for sale or rent, and users can browse, search, and review listings. The platform handles everything from residential plots to commercial office spaces and apartments.
 
