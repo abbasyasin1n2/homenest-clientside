@@ -23,11 +23,11 @@ const HowItWorks = () => {
   ];
 
   return (
-    <section className="py-16 bg-gradient-to-br from-green-50 to-gray-100">
+    <section className="py-16 bg-gradient-to-br from-green-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">How It Works Step by Step</h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">How It Works Step by Step</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
             Follow this track, grow up your business asset with the field. Simple steps to find your perfect property.
           </p>
         </div>
@@ -38,8 +38,8 @@ const HowItWorks = () => {
               <div className="flex flex-col items-center flex-1">
                 {/* Step Circle */}
                 <div className="relative mb-6">
-                  <div className="bg-white rounded-full p-6 shadow-lg border-4 border-green-100">
-                    <div className="text-green-500 flex items-center justify-center">
+                  <div className="bg-white dark:bg-gray-700 rounded-full p-6 shadow-lg border-4 border-green-100 dark:border-green-900/30">
+                    <div className="text-green-500 dark:text-green-400 flex items-center justify-center">
                       {step.icon}
                     </div>
                   </div>
@@ -49,10 +49,10 @@ const HowItWorks = () => {
                 </div>
                 
                 {/* Step Content */}
-                <h3 className="text-xl font-bold text-gray-800 mb-3 text-center">
+                <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-3 text-center">
                   {step.title}
                 </h3>
-                <p className="text-gray-600 text-center text-sm leading-relaxed">
+                <p className="text-gray-600 dark:text-gray-400 text-center text-sm leading-relaxed">
                   {step.description}
                 </p>
               </div>

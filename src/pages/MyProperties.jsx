@@ -181,14 +181,14 @@ const MyProperties = () => {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4 space-y-10">
+    <section className="py-8">
+      <div className="space-y-10">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
               My Properties
             </h1>
-            <p className="text-gray-600 mt-2 max-w-2xl">
+            <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
               Manage the properties you have listed on HomeNest. Update details, check
               availability, or remove listings in just a few clicks.
             </p>
@@ -204,7 +204,7 @@ const MyProperties = () => {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[...Array(3)].map((_, index) => (
-              <Card key={index} className="border-0 rounded-3xl shadow-lg">
+              <Card key={index} className="border-0 rounded-3xl shadow-lg bg-white dark:bg-gray-800">
                 <Skeleton className="h-40 rounded-t-3xl" />
                 <CardContent className="p-6 space-y-4">
                   <Skeleton className="h-6 w-3/4" />
@@ -218,20 +218,20 @@ const MyProperties = () => {
             ))}
           </div>
         ) : error ? (
-          <Card className="border-0 shadow-lg rounded-3xl p-8 text-center">
+          <Card className="border-0 shadow-lg rounded-3xl p-8 text-center bg-white dark:bg-gray-800">
             <h2 className="text-2xl font-semibold text-red-500 mb-2">
               Failed to load your properties
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               {error?.message || 'Please refresh the page and try again.'}
             </p>
           </Card>
         ) : sortedProperties.length === 0 ? (
-          <Card className="border-0 shadow-lg rounded-3xl p-8 md:p-12 text-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <Card className="border-0 shadow-lg rounded-3xl p-8 md:p-12 text-center bg-white dark:bg-gray-800">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
               You haven&apos;t listed any properties yet
             </h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-gray-600 dark:text-gray-400 mb-8">
               Start earning by listing your properties on HomeNest. It only takes a few
               minutes to reach thousands of interested buyers and tenants across Bangladesh.
             </p>
@@ -253,7 +253,7 @@ const MyProperties = () => {
               return (
                 <Card
                   key={property._id}
-                  className="border-0 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col"
+                  className="border-0 rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col bg-white dark:bg-gray-800"
                 >
                   <div className="relative h-48">
                     <img
@@ -276,7 +276,7 @@ const MyProperties = () => {
                   </div>
 
                   <CardHeader className="pb-0">
-                    <div className="flex items-center gap-2 text-gray-500 text-sm">
+                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
                       <FaClock />
                       <span>
                         {property.createdAt
@@ -284,22 +284,22 @@ const MyProperties = () => {
                           : 'Recently listed'}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-800 line-clamp-1">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-white line-clamp-1">
                       {property.propertyName}
                     </h3>
-                    <div className="flex items-center gap-2 text-gray-500 text-sm">
+                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
                       <FaMapMarkerAlt className="text-green-500" />
                       <span className="line-clamp-1">{property.location}</span>
                     </div>
                   </CardHeader>
 
                   <CardContent className="space-y-4">
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed line-clamp-3">
                       {property.description ||
                         'Detailed description is not available. Please update this listing.'}
                     </p>
 
-                    <div className="grid grid-cols-2 gap-3 text-sm text-gray-600">
+                    <div className="grid grid-cols-2 gap-3 text-sm text-gray-600 dark:text-gray-400">
                       {property.propertySize && (
                         <div className="flex items-center gap-2">
                           <FaRulerCombined className="text-green-500" />

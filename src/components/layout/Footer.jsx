@@ -97,13 +97,13 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/add-property" className="text-sm hover:text-green-500 transition-colors inline-block">
-                  Add Property
+                <Link to="/about-us" className="text-sm hover:text-green-500 transition-colors inline-block">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link to="/my-properties" className="text-sm hover:text-green-500 transition-colors inline-block">
-                  My Properties
+                <Link to="/contact" className="text-sm hover:text-green-500 transition-colors inline-block">
+                  Contact Us
                 </Link>
               </li>
             </ul>
@@ -141,24 +141,24 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white mb-4">Legal</h3>
             <ul className="space-y-2.5">
               <li>
-                <a href="#" className="text-sm hover:text-green-500 transition-colors inline-block">
+                <Link to="/terms" className="text-sm hover:text-green-500 transition-colors inline-block">
                   Terms & Conditions
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-green-500 transition-colors inline-block">
+                <Link to="/privacy" className="text-sm hover:text-green-500 transition-colors inline-block">
                   Privacy Policy
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-green-500 transition-colors inline-block">
-                  Cookie Policy
-                </a>
+                <Link to="/about-us" className="text-sm hover:text-green-500 transition-colors inline-block">
+                  About HomeNest
+                </Link>
               </li>
               <li>
-                <a href="#" className="text-sm hover:text-green-500 transition-colors inline-block">
-                  Refund Policy
-                </a>
+                <Link to="/contact" className="text-sm hover:text-green-500 transition-colors inline-block">
+                  Help & Support
+                </Link>
               </li>
             </ul>
           </div>

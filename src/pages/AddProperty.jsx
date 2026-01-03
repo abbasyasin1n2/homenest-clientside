@@ -405,14 +405,14 @@ const AddProperty = () => {
   };
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <Card className="border-0 shadow-xl rounded-3xl">
+    <section className="py-8">
+      <div>
+        <Card className="border-0 shadow-xl rounded-3xl bg-white dark:bg-gray-800">
           <CardHeader className="space-y-2">
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
               Add a New Property
             </h1>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               Provide accurate details so tenants and buyers can discover the right property quickly.
             </p>
           </CardHeader>

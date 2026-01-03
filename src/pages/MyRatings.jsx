@@ -110,36 +110,36 @@ const MyRatings = () => {
   }
 
   return (
-    <section className="py-16 bg-gray-50">
-      <div className="container mx-auto px-4 space-y-10">
+    <section className="py-8">
+      <div className="space-y-10">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-800">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
               My Ratings & Reviews
             </h1>
-            <p className="text-gray-600 mt-2 max-w-2xl">
+            <p className="text-gray-600 dark:text-gray-400 mt-2 max-w-2xl">
               Track and manage the feedback you have shared across the HomeNest portal.
               Help other clients discover the right properties with your insights.
             </p>
           </div>
-          <Card className="border-0 shadow-lg rounded-3xl bg-white/90 backdrop-blur w-full max-w-sm">
+          <Card className="border-0 shadow-lg rounded-3xl bg-white dark:bg-gray-800 w-full max-w-sm">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-500">Total Reviews</p>
-                  <p className="text-3xl font-bold text-gray-800">{stats.total}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Total Reviews</p>
+                  <p className="text-3xl font-bold text-gray-800 dark:text-white">{stats.total}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-500">Average Rating</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">Average Rating</p>
                   <div className="flex items-center gap-2 justify-end">
                     <Rating style={{ maxWidth: 120 }} value={stats.average} readOnly />
-                    <span className="text-xl font-semibold text-gray-800">
+                    <span className="text-xl font-semibold text-gray-800 dark:text-white">
                       {stats.total ? stats.average : '–'}
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="mt-4 text-sm text-gray-500">
+              <div className="mt-4 text-sm text-gray-500 dark:text-gray-400">
                 Last review:{' '}
                 {stats.latestDate
                   ? format(stats.latestDate, 'MMM dd, yyyy')
@@ -152,7 +152,7 @@ const MyRatings = () => {
         {isLoading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[...Array(4)].map((_, index) => (
-              <Card key={index} className="border-0 rounded-3xl shadow-lg">
+              <Card key={index} className="border-0 rounded-3xl shadow-lg bg-white dark:bg-gray-800">
                 <Skeleton className="h-40 rounded-t-3xl" />
                 <CardContent className="p-6 space-y-4">
                   <Skeleton className="h-6 w-3/4" />
@@ -164,20 +164,20 @@ const MyRatings = () => {
             ))}
           </div>
         ) : error ? (
-          <Card className="border-0 shadow-lg rounded-3xl p-8 text-center">
+          <Card className="border-0 shadow-lg rounded-3xl p-8 text-center bg-white dark:bg-gray-800">
             <h2 className="text-2xl font-semibold text-red-500 mb-2">
               Failed to load your reviews
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 dark:text-gray-400">
               {error?.message || 'Please refresh the page and try again.'}
             </p>
           </Card>
         ) : ratings.length === 0 ? (
-          <Card className="border-0 shadow-lg rounded-3xl p-8 md:p-12 text-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              You haven’t reviewed any properties yet
+          <Card className="border-0 shadow-lg rounded-3xl p-8 md:p-12 text-center bg-white dark:bg-gray-800">
+            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">
+              You haven't reviewed any properties yet
             </h2>
-            <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
               Explore HomeNest to share your experience with the properties you have visited or rented.
             </p>
             <Button
@@ -197,35 +197,35 @@ const MyRatings = () => {
                 return dateB - dateA;
               })
               .map((rating) => (
-                <Card key={rating._id} className="border-0 rounded-3xl shadow-lg flex flex-col">
+                <Card key={rating._id} className="border-0 rounded-3xl shadow-lg flex flex-col bg-white dark:bg-gray-800">
                   <CardHeader className="pb-0">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <Rating style={{ maxWidth: 120 }} value={rating.ratingValue} readOnly />
-                        <Badge className="bg-green-100 text-green-700 border border-green-200">
+                        <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 border border-green-200 dark:border-green-700">
                           {rating.ratingValue} / 5
                         </Badge>
                       </div>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
                         {rating.createdAt
                           ? format(new Date(rating.createdAt), 'MMM dd, yyyy')
                           : ''}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-800">
+                    <h3 className="text-xl font-bold text-gray-800 dark:text-white">
                       {rating.propertyName || 'HomeNest Property'}
                     </h3>
-                    <div className="flex items-center gap-2 text-gray-500 text-sm mt-1">
+                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mt-1">
                       <FaTag className="text-green-500" />
                       <span>{rating.propertyCategory || 'General'}</span>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-gray-600 text-sm leading-relaxed">
+                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                       {rating.reviewText || 'No additional feedback provided.'}
                     </p>
                     {rating.propertyLocation && (
-                      <div className="flex items-center gap-2 text-sm text-gray-500">
+                      <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                         <FaMapMarkerAlt className="text-green-500" />
                         <span>{rating.propertyLocation}</span>
                       </div>

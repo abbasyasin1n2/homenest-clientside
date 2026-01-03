@@ -5,7 +5,8 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
-import { FaArrowRight } from 'react-icons/fa';
+import { FaArrowRight, FaChevronDown } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const HeroSlider = () => {
   const slides = [
@@ -32,8 +33,15 @@ const HeroSlider = () => {
     },
   ];
 
+  const scrollToNextSection = () => {
+    window.scrollTo({
+      top: window.innerHeight * 0.65,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <div className="relative h-[600px] md:h-[700px]">
+    <div className="relative h-[65vh] md:h-[70vh]">
       <Swiper
         modules={[Autoplay, Pagination, Navigation]}
         spaceBetween={0}
@@ -100,6 +108,26 @@ const HeroSlider = () => {
           </SwiperSlide>
         ))}
       </Swiper>
+
+      {/* Scroll Down Indicator */}
+      <motion.button
+        onClick={scrollToNextSection}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 text-white cursor-pointer group"
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1, duration: 0.5 }}
+      >
+        <span className="text-sm font-medium tracking-wider uppercase opacity-80 group-hover:opacity-100 transition-opacity">
+          Scroll Down
+        </span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          className="w-10 h-10 rounded-full border-2 border-white/50 flex items-center justify-center group-hover:border-white group-hover:bg-white/10 transition-all"
+        >
+          <FaChevronDown className="text-lg" />
+        </motion.div>
+      </motion.button>
     </div>
   );
 };

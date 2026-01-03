@@ -36,25 +36,25 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-16 bg-white dark:bg-gray-800">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-800 mb-4">Why Choose Us</h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">Why Choose Us</h2>
+          <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
             Let's discover the best places to living more relax. We make property hunting simple, fast, and reliable.
           </p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {features.map((feature, index) => (
-            <Card key={index} className="hover:shadow-lg transition-shadow border-gray-200">
+            <Card key={index} className="hover:shadow-lg transition-shadow border-gray-200 dark:border-gray-700 dark:bg-gray-700">
               <CardContent className="p-6">
                 <div className="flex flex-col items-center text-center">
-                  <div className="bg-green-100 p-4 rounded-full mb-4 text-green-500">
+                  <div className="bg-green-100 dark:bg-green-900/30 p-4 rounded-full mb-4 text-green-500 dark:text-green-400">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-bold text-gray-800 mb-3">{feature.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
+                  <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-3">{feature.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
                     {feature.description}
                   </p>
                 </div>

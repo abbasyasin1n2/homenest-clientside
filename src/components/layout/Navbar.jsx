@@ -1,9 +1,12 @@
 import { Link, NavLink } from 'react-router';
 import { useAuth } from '../../contexts/AuthContext';
 import { useTheme } from '../../contexts/ThemeContext';
-import { FaHome, FaBuilding, FaPlusCircle, FaListAlt, FaStar, FaBars, FaMoon, FaSun } from 'react-icons/fa';
+import { useComparison } from '../../contexts/ComparisonContext';
+import { FaHome, FaBuilding, FaPlusCircle, FaListAlt, FaStar, FaBars, FaMoon, FaSun, FaHeart, FaPaperPlane, FaInbox, FaUser, FaChartLine, FaExchangeAlt, FaMapMarkedAlt, FaUsers } from 'react-icons/fa';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import NotificationCenter from '../NotificationCenter';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -16,6 +19,7 @@ import {
 const Navbar = () => {
   const { user, logoutUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { comparisonList } = useComparison();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleLogout = async () => {
@@ -32,72 +36,116 @@ const Navbar = () => {
         <NavLink
           to="/"
           className={({ isActive }) =>
-            `flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium ${
+            `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm ${
               isActive
                 ? 'bg-green-500 text-white'
                 : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
             }`
           }
         >
-          <FaHome /> Home
+          <FaHome className="text-base" /> <span className="hidden xl:inline">Home</span>
         </NavLink>
       </li>
       <li>
         <NavLink
           to="/all-properties"
           className={({ isActive }) =>
-            `flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium ${
+            `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm whitespace-nowrap ${
               isActive
                 ? 'bg-green-500 text-white'
                 : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
             }`
           }
         >
-          <FaBuilding /> All Properties
+          <FaBuilding className="text-base" /> <span className="hidden xl:inline">All Properties</span>
         </NavLink>
       </li>
+      {!user && (
+        <li>
+          <NavLink
+            to="/about-us"
+            className={({ isActive }) =>
+              `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm whitespace-nowrap ${
+                isActive
+                  ? 'bg-green-500 text-white'
+                  : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
+              }`
+            }
+          >
+            <FaUsers className="text-base" /> <span className="hidden xl:inline">About Us</span>
+          </NavLink>
+        </li>
+      )}
       {user && (
         <>
           <li>
             <NavLink
-              to="/add-property"
+              to="/dashboard"
               className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium ${
+                `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm ${
                   isActive
                     ? 'bg-green-500 text-white'
-                    : 'hover:bg-green-50 text-gray-700'
+                    : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
                 }`
               }
             >
-              <FaPlusCircle /> Add Property
+              <FaChartLine className="text-base" /> <span className="hidden xl:inline">Dashboard</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/add-property"
+              className={({ isActive }) =>
+                `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm whitespace-nowrap ${
+                  isActive
+                    ? 'bg-green-500 text-white'
+                    : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
+                }`
+              }
+            >
+              <FaPlusCircle className="text-base" /> <span className="hidden xl:inline">Add Property</span>
             </NavLink>
           </li>
           <li>
             <NavLink
               to="/my-properties"
               className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium ${
+                `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm whitespace-nowrap ${
                   isActive
                     ? 'bg-green-500 text-white'
-                    : 'hover:bg-green-50 text-gray-700'
+                    : 'hover:bg-green-50 text-gray-700 dark:text-gray-200'
                 }`
               }
             >
-              <FaListAlt /> My Properties
+              <FaListAlt className="text-base" /> <span className="hidden xl:inline">My Properties</span>
             </NavLink>
           </li>
           <li>
             <NavLink
               to="/my-ratings"
               className={({ isActive }) =>
-                `flex items-center gap-2 px-4 py-2 rounded-lg transition-all font-medium ${
+                `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm whitespace-nowrap ${
                   isActive
                     ? 'bg-green-500 text-white'
-                    : 'hover:bg-green-50 text-gray-700'
+                    : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
                 }`
               }
             >
-              <FaStar /> My Ratings
+              <FaStar className="text-base" /> <span className="hidden xl:inline">My Ratings</span>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/wishlist"
+              className={({ isActive }) =>
+                `flex items-center gap-1.5 px-2 xl:px-3 py-2 rounded-lg transition-all font-medium text-sm ${
+                  isActive
+                    ? 'bg-green-500 text-white'
+                    : 'hover:bg-green-50 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200'
+                }`
+              }
+            >
+              <FaHeart className="text-base" /> <span className="hidden xl:inline">Wishlist</span>
             </NavLink>
           </li>
         </>
@@ -110,20 +158,53 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity flex-shrink-0">
             <div className="bg-green-500 p-2 rounded-lg shadow-md">
-              <FaHome className="text-white text-2xl" />
+              <FaHome className="text-white text-xl" />
             </div>
-            <span className="text-2xl font-bold text-gray-800 dark:text-white">
+            <span className="text-xl xl:text-2xl font-bold text-gray-800 dark:text-white whitespace-nowrap">
               Home<span className="text-green-500">Nest</span>
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <ul className="hidden lg:flex items-center gap-2">{navLinks}</ul>
+          <ul className="hidden lg:flex items-center gap-1">{navLinks}</ul>
 
           {/* Auth Section - Desktop */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-2">
+            {/* Map View Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="rounded-full hover:bg-green-50 dark:hover:bg-gray-800"
+            >
+              <Link to="/map-view">
+                <FaMapMarkedAlt className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+              </Link>
+            </Button>
+
+            {/* Comparison Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              asChild
+              className="rounded-full hover:bg-green-50 dark:hover:bg-gray-800 relative"
+            >
+              <Link to="/compare">
+                <FaExchangeAlt className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+                {comparisonList.length > 0 && (
+                  <Badge className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                    {comparisonList.length}
+                  </Badge>
+                )}
+              </Link>
+            </Button>
+
+            {/* Notification Center */}
+            {user && <NotificationCenter />}
+
+            {/* Theme Toggle */}
             <Button
               variant="ghost"
               size="icon"
@@ -164,6 +245,25 @@ const Navbar = () => {
                       </p>
                     </div>
                   </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile" className="w-full cursor-pointer">
+                      <FaUser className="mr-2 h-4 w-4" />
+                      My Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/my-inquiries" className="w-full cursor-pointer">
+                      <FaPaperPlane className="mr-2 h-4 w-4" />
+                      My Inquiries
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/received-inquiries" className="w-full cursor-pointer">
+                      <FaInbox className="mr-2 h-4 w-4" />
+                      Received Inquiries
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={handleLogout}
